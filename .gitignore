@@ -1,6 +1,48 @@
-venv
-requirements.txt
-README.md
-alembic
-alembic.ini
+# Ambiente virtual
+venv/
+.env
+
+# Banco de dados local
+*.db
 banco.db
+
+# Arquivos de configuração sensíveis
+alembic.ini
+.env*
+
+# Pastas do Alembic que não precisam ser versionadas (exceto versions/)
+alembic/script.py.mako
+alembic/env.py
+
+# Cache do Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Logs e arquivos temporários
+*.log
+*.tmp
+*.bak
+
+# VSCode ou outros editores
+.vscode/
+.idea/
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos e diretórios ocultos de sistema/IDE
+*.swp
+*.swo
+
+# Dependências específicas (você já tem o requirements.txt)
+Pipfile
+Pipfile.lock
+poetry.lock
+
+# Testes temporários
+.coverage
+htmlcov/
+pytest_cache/
