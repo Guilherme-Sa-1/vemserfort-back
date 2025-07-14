@@ -11,3 +11,8 @@ class UsuarioSchema(BaseModel):
 
     class Config:
         from_atributes=True
+
+
+
+class PedidoSchema(BaseModel):
+    
