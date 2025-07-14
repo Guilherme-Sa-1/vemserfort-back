@@ -13,6 +13,8 @@ alembic.ini
 # Pastas do Alembic que não precisam ser versionadas (exceto versions/)
 alembic/script.py.mako
 alembic/env.py
+# Se você quer ignorar migrações específicas que não são para serem versionadas:
+# alembic/versions/e37638ed1a7_add_post_model_and_relationships.py
 
 # Cache do Python
 __pycache__/
@@ -46,3 +48,6 @@ poetry.lock
 .coverage
 htmlcov/
 pytest_cache/
+
+# Diretórios de uploads/arquivos gerados
+src/uploads/

@@ -7,9 +7,9 @@ from sqlalchemy.orm import Session
 
 auth_routes=APIRouter(prefix="/auth",tags=["Autenticação"])
 
-@auth_routes.get("/create")
-async def home():
-    return {"message": "Usuario criado com sucesso!"}
+# @auth_routes.get("/create")
+# async def home():
+#     return {"message": "Usuario criado com sucesso!"}
 
 
 @auth_routes.post("/criar_conta")

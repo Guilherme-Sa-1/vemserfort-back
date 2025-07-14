@@ -21,6 +21,8 @@ class Usuario(Base):
     matriculas = relationship("Matricula", back_populates="usuario")
     # Relacionamento para acessar os registros de frequência de um usuário
     frequencias = relationship("Frequencia", back_populates="usuario")
+     # RELACIONAMENTO para os posts que o admin criou
+    posts_criados = relationship("Post", back_populates="admin")
 
     def __init__(self, nome, email, senha, ativo=True, admin=False):
         self.nome = nome
@@ -104,3 +106,22 @@ class Frequencia(Base):
         self.usuario_id = usuario_id
         self.aula_id = aula_id
         self.presente = presente
+
+
+
+class Post(Base):
+    __tablename__ = "posts"
+
+    id = Column("id", Integer, primary_key=True, autoincrement=True)
+    admin_id = Column("admin_id", Integer, ForeignKey("usuarios.id"), nullable=False)
+    conteudo_texto = Column("conteudo_texto", String)
+    url_midia = Column("url_midia", String) 
+    data_criacao = Column("data_criacao", DateTime, default=datetime.now)
+
+    # Relacionamento para saber qual admin criou o post
+    admin = relationship("Usuario", back_populates="posts_criados")
+
+    def __init__(self, admin_id, conteudo_texto=None, url_midia=None):
+        self.admin_id = admin_id
+        self.conteudo_texto = conteudo_texto
+        self.url_midia = url_midia

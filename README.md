@@ -4,7 +4,7 @@ Mas como você já me enviou os seguintes arquivos:
 
 * `main.py` ✅
 * `auth_routes.py` ✅
-* `order_routes.py` ✅
+* `posts_routes.py` ✅
 * `requirements.txt` ✅
 
 Com base nisso, vou criar um **README.md completo e bem estruturado** para seu projeto **vemserfort-back**.
@@ -42,7 +42,7 @@ vemserfort-back/
 ├── src/
 │   ├── routes/
 │   │   ├── auth\_routes.py      # Rotas de autenticação
-│   │   └── order\_routes.py     # Rotas de criação de post
+│   │   └── posts\_routes.py     # Rotas de criação de post
 │   └── models/
 │       └── models.py           # Modelos de dados
 
@@ -118,11 +118,11 @@ A API estará disponível em:
 
 ---
 
-### Postagens (`/order`)
+### Postagens (`/posts`)
 
 | Método | Rota            | Descrição              |
 | ------ | --------------- | ---------------------- |
-| POST   | `/order/create` | Cria uma nova postagem |
+| POST   | `/posts/create` | Cria uma nova postagem |
 
 ---
 

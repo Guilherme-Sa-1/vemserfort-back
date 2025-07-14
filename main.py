@@ -11,8 +11,8 @@ app = FastAPI()
 
 # Importação das rotas
 from src.routes.auth_routes import auth_routes
-from src.routes.order_routes import order_routes
+from src.routes.posts_routes import posts_routes
 
 # Registro das rotas
 app.include_router(auth_routes)
-app.include_router(order_routes)
+app.include_router(posts_routes)
