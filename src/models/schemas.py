@@ -26,5 +26,11 @@ class PostResponse(BaseModel):
     data_criacao: datetime
 
     class Config:
-        from_attributes=True
+        from_attributes = True
     
+class LoginSchema(BaseModel):
+    email:str
+    senha:str
+
+    class Config:
+        from_attributes = True
