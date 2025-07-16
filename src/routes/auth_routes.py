@@ -6,7 +6,7 @@ from src.utils.security import bcrypt_context
 from main import ALGORITHM,ACCESS_TOKEN_EXPIRE_TOKEN,SECRET_KEY
 from ..models.schemas import UsuarioSchema,LoginSchema
 from sqlalchemy.orm import Session
-from jose import jwt,JWTError
+from jose import jwt
 from datetime import datetime,timedelta,timezone
 
 auth_routes=APIRouter(prefix="/auth",tags=["Autenticação"])
@@ -73,8 +73,6 @@ async def login_form(dados_formulario:OAuth2PasswordRequestForm= Depends(),sessi
             "access_token":access_token,
             "token_type":"Bearer"
             }
-    
-
 
 @auth_routes.get("/refresh")
 async def use_refresh_token(usuario:Usuario=Depends(verificar_token)):
