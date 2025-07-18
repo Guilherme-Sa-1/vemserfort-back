@@ -7,9 +7,9 @@ from datetime import datetime
 import os
 from typing import Optional
 
-posts_routes = APIRouter(prefix="/posts", tags=["Home"],dependencies=[Depends(verificar_token)])
+posts_routes = APIRouter(prefix="/posts", tags=["Posts"],dependencies=[Depends(verificar_token)])
 
-UPLOAD_DIR = "src/uploads"  # A pasta deve existir ou será criada
+UPLOAD_DIR = "src/uploads" 
 
 @posts_routes.post("/criar_post")
 async def criar_post(
