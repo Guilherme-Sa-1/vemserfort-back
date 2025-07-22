@@ -1,24 +1,33 @@
 from fastapi import APIRouter, Depends, Form, File, UploadFile, HTTPException
+from sqlalchemy import desc
 from sqlalchemy.orm import Session
+from typing import List,Optional
 from ..dependencies import pegar_sessao,verificar_token
 from ..models.models import Post
-from ..models.schemas import PostResponse  # Certifique-se de ter isso no schemas.py
+from ..models.schemas import PostResponse 
 from datetime import datetime
 import os
-from typing import Optional
 
-posts_routes = APIRouter(prefix="/posts", tags=["Posts"],dependencies=[Depends(verificar_token)])
+posts_routes = APIRouter(prefix="/posts", tags=["Posts"],)
 
 UPLOAD_DIR = "src/uploads" 
+
+@posts_routes.get("/listar_posts", response_model=List[PostResponse])
+async def listar_posts(session: Session = Depends(pegar_sessao)):
+    posts = session.query(Post).order_by(desc(Post.data_criacao)).all()
+    return posts
+
 
 @posts_routes.post("/criar_post")
 async def criar_post(
     conteudo_texto: str = Form(...),
     arquivo: Optional[UploadFile] = File(None),
-    session: Session = Depends(pegar_sessao)
+    session: Session = Depends(pegar_sessao),
+    usuario=Depends(verificar_token)
 ):
-    # Simulação de admin_id (idealmente isso virá do token futuramente)
-    admin_id = 6
+    
+    if not usuario.admin:
+        raise HTTPException(status_code=403, detail="Apenas administradores podem criar posts.")
 
     url_arquivo = None
 
@@ -39,7 +48,7 @@ async def criar_post(
 
     # Cria o post no banco
     novo_post = Post(
-        admin_id=admin_id,
+        admin_id=usuario.id,
         conteudo_texto=conteudo_texto,
         url_midia=url_arquivo
     )
@@ -54,22 +63,20 @@ async def criar_post(
         "url_midia": novo_post.url_midia
     }
 
-@posts_routes.get("/listar_posts", response_model=list[PostResponse])
-async def listar_posts(session: Session = Depends(pegar_sessao)):
-    posts = session.query(Post).order_by(Post.data_criacao.desc()).all()
-    return posts
 
-@posts_routes.post("/deletar/{post_id}")
-async def deletar_post(post_id:int,session:Session=Depends(pegar_sessao)):
-    post=session.query(Post).filter(Post.id==post_id).first()
+@posts_routes.delete("/deletar/{post_id}")
+async def deletar_post(
+    post_id: int,
+    session: Session = Depends(pegar_sessao),
+    usuario = Depends(verificar_token)
+):
+    if not usuario.admin:
+        raise HTTPException(status_code=403, detail="Apenas administradores podem deletar posts.")
 
+    post = session.query(Post).filter(Post.id == post_id).first()
     if not post:
-        raise HTTPException(status_code=404,detail="Post não encontrado")
-    
-    if post.url_midia and os.path.exists(post.url_midia):
-        os.remove(post.url_midia)
+        raise HTTPException(status_code=404, detail="Post não encontrado.")
 
     session.delete(post)
     session.commit()
-
-    return{"Mensagem":"Post deletado com suscesso!"}
+    return {"mensagem": "Post deletado com sucesso."}

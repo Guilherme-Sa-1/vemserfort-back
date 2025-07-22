@@ -18,6 +18,7 @@ alembic/env.py
 
 # Cache do Python
 __pycache__/
+__pycache__
 *.pyc
 *.pyo
 *.pyd
