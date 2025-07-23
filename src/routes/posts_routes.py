@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from typing import List,Optional
 from ..dependencies import pegar_sessao,verificar_token
 from ..models.models import Post
-from ..models.schemas import PostResponse 
+from ..models.schemas import PostResponse,PostCreate
 from datetime import datetime
 import os
 
@@ -20,7 +20,7 @@ async def listar_posts(session: Session = Depends(pegar_sessao)):
 
 @posts_routes.post("/criar_post")
 async def criar_post(
-    conteudo_texto: str = Form(...),
+    dados: PostCreate = Depends(PostCreate.as_form),
     arquivo: Optional[UploadFile] = File(None),
     session: Session = Depends(pegar_sessao),
     usuario=Depends(verificar_token)
@@ -49,7 +49,7 @@ async def criar_post(
     # Cria o post no banco
     novo_post = Post(
         admin_id=usuario.id,
-        conteudo_texto=conteudo_texto,
+        conteudo_texto=dados.conteudo_texto,
         url_midia=url_arquivo
     )
     session.add(novo_post)
@@ -76,6 +76,9 @@ async def deletar_post(
     post = session.query(Post).filter(Post.id == post_id).first()
     if not post:
         raise HTTPException(status_code=404, detail="Post não encontrado.")
+    
+    if post.url_midia and os.path.exists(post.url_midia):
+        os.remove(post.url_midia)
 
     session.delete(post)
     session.commit()

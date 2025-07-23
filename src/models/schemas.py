@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
+from fastapi import Form
 
 
 class UsuarioSchema(BaseModel):
@@ -15,7 +16,14 @@ class UsuarioSchema(BaseModel):
 
 
 class PostCreate(BaseModel):
-    conteudo_texto:Optional[str]
+    conteudo_texto: Optional[str]
+
+    @classmethod
+    def as_form(
+        cls,
+        conteudo_texto: Optional[str] = Form(None),
+    ):
+        return cls(conteudo_texto=conteudo_texto)
 
 
 class PostResponse(BaseModel):
