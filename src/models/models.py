@@ -38,6 +38,7 @@ class Curso(Base):
     id = Column("id", Integer, primary_key=True, autoincrement=True)
     nome = Column("nome", String, nullable=False)
     professor = Column("professor", String)
+    total_aulas = Column(Integer, nullable=False)
 
     # Relacionamentos para acessar as matrículas e aulas de um curso
     matriculas = relationship("Matricula", back_populates="curso")

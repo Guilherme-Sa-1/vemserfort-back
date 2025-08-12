@@ -144,7 +144,3 @@ Para sugestões, abra uma [issue](https://github.com/Guilherme-Sa-1/vemserfort-b
 
 ---
 
-Se quiser, posso gerar esse README como arquivo `.md` para você adicionar direto no seu projeto.
-
-Deseja que eu gere esse arquivo pra você agora?
-```
