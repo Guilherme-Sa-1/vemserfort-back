@@ -14,7 +14,6 @@ class UsuarioSchema(BaseModel):
     class Config:
         from_attributes = True
 
-
 # --------------------- LOGIN ---------------------
 class LoginSchema(BaseModel):
     email: str
@@ -22,7 +21,6 @@ class LoginSchema(BaseModel):
 
     class Config:
         from_attributes = True
-
 
 # --------------------- POSTS ---------------------
 class PostCreate(BaseModel):
@@ -32,7 +30,6 @@ class PostCreate(BaseModel):
     def as_form(cls, conteudo_texto: Optional[str] = Form(None)):
         return cls(conteudo_texto=conteudo_texto)
 
-
 class PostResponse(BaseModel):
     id: int
     admin_id: int
@@ -40,35 +37,71 @@ class PostResponse(BaseModel):
     url_midia: Optional[str]
     data_criacao: datetime
 
+    class Config:   
+        from_attributes = True
+
+# --------------------- MATRÍCULAS ---------------------
+class MatriculaSchema(BaseModel):
+    id_matricula: int
+    id_usuario: int
+    id_curso: int
+    data_matricula: datetime
+    status: str
+
     class Config:
         from_attributes = True
 
+class MatriculaResponse(BaseModel):
+    mensagem: str
+    id_matricula: int
+
+    class Config:
+        from_attributes = True
 
 # --------------------- CURSOS ---------------------
 class CursoCreate(BaseModel):
     nome: str
     professor: str
     descricao: str
-    total_aulas: int  # <-- número fixo de aulas do curso (importante para frequências)
-
+    carga_horaria: int
+    data_inicio: datetime
+    data_termino: datetime
+    total_aulas: int
 
 class CursoResponse(BaseModel):
-    id: int
+    id_curso: int
     nome: str
     professor: str
     descricao: str
+    carga_horaria: int
+    data_inicio: datetime
+    data_termino: datetime
     total_aulas: int
 
     class Config:
         from_attributes = True
 
+class CursoListagemResponse(BaseModel):
+    id_curso: int
+    nome: str
+    professor: str
+    total_matriculas: int
+
+    class Config:
+        from_attributes = True
+
+class CursoDetalhesResponse(CursoResponse):
+    matriculas: List[MatriculaSchema] = []
+    total_matriculas: int = 0
+
+    class Config:
+        from_attributes = True
 
 # --------------------- AULAS ---------------------
 class AulaCreate(BaseModel):
     titulo: str
     data: datetime
     curso_id: int
-
 
 # --------------------- FREQUÊNCIA ---------------------
 class CursoFrequencia(BaseModel):
@@ -78,7 +111,6 @@ class CursoFrequencia(BaseModel):
 
     class Config:
         from_attributes = True
-
 
 class AlunoFrequencia(BaseModel):
     usuario_id: int
