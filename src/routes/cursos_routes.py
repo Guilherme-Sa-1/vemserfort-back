@@ -11,22 +11,36 @@ cursos_router = APIRouter(
    )
 
 
-@cursos_router.post("/criar")
-async def criar_curso():
-    
+# Rota de criação de curso
+@cursos_router.post("/criar",status_code=status.HTTP_201_CREATED,response_model=CursoResponse)
+async def criar_curso(
+    curso: CursoCreate,
+    session: Session = Depends(pegar_sessao),
+    admin: Usuario = Depends(verificar_admin)
+):
+    novo_curso = Curso(
+        nome=curso.nome,
+        professor=curso.professor,
+        descricao=curso.descricao,
+        carga_horaria=curso.carga_horaria,
+        data_inicio=curso.data_inicio,
+        data_termino=curso.data_termino,
+        total_aulas=curso.total_aulas
+    )
 
-@cursos_router.get("/listar")
-async def listar_curso():
+    session.add(novo_curso)
+    session.commit()
+    session.refresh(novo_curso)
+    return novo_curso
 
+# Rota de listagem de cursos
+@cursos_router.get("/listar", response_model=List[CursoListagemResponse])
 
-@cursos_router.get("/{curso_id}/detalhes")
-async def detalhar_curso():
+# Rota de detalhes do curso
+@cursos_router.get("/{curso_id}/detalhes", response_model=CursoDetalhesResponse)
 
-@cursos_router.post("/matricular")
-async def matricular_aluno(usuario_id:int,curso_id:int,session: Session= Depends(pegar_sessao)):
-     # Verificar se já está matriculado
-       # Criar nova matrícula
+# Rota de matrícula
+@cursos_router.post("/matricular", response_model=MatriculaResponse)
 
-@cursos_router.get("{curso_id}/matricula")
-async def listar_matriculas
-    
+# Rota de listagem de matrículas
+@cursos_router.get("/{curso_id}/matriculas", response_model=List[MatriculaSchema])
